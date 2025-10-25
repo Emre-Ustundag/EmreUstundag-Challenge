@@ -21,13 +21,25 @@ public struct HeroMetadata has key, store {
 public fun create_hero(name: String, image_url: String, power: u64, ctx: &mut TxContext) {
     
     // TODO: Create a new Hero struct with the given parameters
-        // Hints:
-        // Use object::new(ctx) to create a unique ID
-        // Set name, image_url, and power fields
+    // Hints:
+    let hero = Hero{
+        id: object::new(ctx),
+        name,
+        image_url,
+        power,
+    };
+    // Use object::new(ctx) to create a unique ID
+    // Set name, image_url, and power fields
     // TODO: Transfer the hero to the transaction sender
     // TODO: Create HeroMetadata and freeze it for tracking
-        // Hints:
+    // Hints:
+    let hero_meta_data = HeroMetadata{
+        id: object::new(ctx),
+        timestamp: ctx.epoch_timestamp_ms(),
+    };
         // Use ctx.epoch_timestamp_ms() for timestamp
+    transfer::transfer(hero, ctx.sender());
+    transfer::freeze_object(hero_meta_data);
     //TODO: Use transfer::freeze_object() to make metadata immutable
 }
 
